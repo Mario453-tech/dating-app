@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edytuj profil{% endblock %}
+
+{% block body %}
+<div class="main-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-header-title">
+                            <i class="fas fa-user-edit me-2"></i>
+                            Edytuj profil
+                        </h5>
+                    </div>
+                    
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        {{ form_widget(form.firstName, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Imię'
+                                            }
+                                        }) }}
+                                        {{ form_label(form.firstName) }}
+                                        {{ form_errors(form.firstName) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        {{ form_widget(form.lastName, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Nazwisko'
+                                            }
+                                        }) }}
+                                        {{ form_label(form.lastName) }}
+                                        {{ form_errors(form.lastName) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        {{ form_widget(form.username, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Nazwa użytkownika'
+                                            }
+                                        }) }}
+                                        {{ form_label(form.username) }}
+                                        {{ form_errors(form.username) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        {{ form_widget(form.email, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Email'
+                                            }
+                                        }) }}
+                                        {{ form_label(form.email) }}
+                                        {{ form_errors(form.email) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        {{ form_widget(form.birthDate, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Data urodzenia'
+                                            }
+                                        }) }}
+                                        {{ form_label(form.birthDate) }}
+                                        {{ form_errors(form.birthDate) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        {{ form_widget(form.location, {
+                                            'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Lokalizacja'
+                                            }
+                                        }) }}
+                                        {{ form_label(form.location) }}
+                                        {{ form_errors(form.location) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        {{ form_widget(form.gender, {
+                                            'attr': {
+                                                'class': 'form-select',
+                                                'placeholder': 'Płeć'
+                                            }
+                                        }) }}
+                                        {{ form_label(form.gender) }}
+                                        {{ form_errors(form.gender) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        {{ form_widget(form.seekingGender, {
+                                            'attr': {
+                                                'class': 'form-select',
+                                                'placeholder': 'Szukam'
+                                            }
+                                        }) }}
+                                        {{ form_label(form.seekingGender) }}
+                                        {{ form_errors(form.seekingGender) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                {{ form_widget(form.bio, {
+                                    'attr': {
+                                        'class': 'form-control form-description',
+                                        'placeholder': 'O mnie'
+                                    }
+                                }) }}
+                                {{ form_label(form.bio) }}
+                                {{ form_errors(form.bio) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <h3 class="h5">Zainteresowania</h3>
+                                <p class="text-muted">
+                                    Możesz zarządzać swoimi zainteresowaniami w osobnej sekcji.
+                                    <a href="{{ path('app_interests_index') }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-heart"></i> Edytuj zainteresowania
+                                    </a>
+                                </p>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Zapisz zmiany
+                                </button>
+                                <a href="{{ path('app_profile') }}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Powrót do profilu
+                                </a>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

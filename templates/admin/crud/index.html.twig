@@ -1,0 +1,39 @@
+{% extends '@EasyAdmin/crud/index.html.twig' %}
+
+{% block content_title %}
+    <h1>{{ ea.crud.customPageTitle ?? 'Lista ' ~ ea.crud.entityLabelInPlural|lower }}</h1>
+{% endblock %}
+
+{% block page_content %}
+    {% block search %}
+        {% if ea.crud.isSearchEnabled %}
+            {{ parent() }}
+        {% endif %}
+    {% endblock %}
+
+    <div class="content-panel">
+        <div class="content-panel-body with-rounded-top with-min-h-250 without-padding">
+            <table class="table datagrid">
+                <thead>
+                    {% block table_head %}
+                        {{ parent() }}
+                    {% endblock table_head %}
+                </thead>
+
+                <tbody>
+                    {% block table_body %}
+                        {{ parent() }}
+                    {% endblock table_body %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% block delete_form %}
+        {{ parent() }}
+    {% endblock delete_form %}
+
+    {% block paginator %}
+        {{ parent() }}
+    {% endblock paginator %}
+{% endblock %}

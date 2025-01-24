@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil {{ user.username }}{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                {% if user.profilePhoto %}
+                    <img src="{{ asset('uploads/profile_photos/' ~ user.profilePhoto) }}" 
+                         class="card-img-top" alt="{{ user.username }}">
+                {% else %}
+                    <img src="{{ gravatar_image }}" 
+                         class="card-img-top" alt="{{ user.username }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ user.username }}</h5>
+                    {% if user.location %}
+                        <p class="card-text"><i class="fas fa-map-marker-alt"></i> {{ user.location }}</p>
+                    {% endif %}
+                    {% if app.user != user %}
+                        <div class="d-grid gap-2">
+                            <a href="{{ path('app_messages_conversation', {'id': user.id}) }}" 
+                               class="btn btn-primary">
+                                <i class="fas fa-envelope"></i> Wyślij wiadomość
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">O mnie</h5>
+                    {% if user.bio %}
+                        <p class="card-text">{{ user.bio|nl2br }}</p>
+                    {% else %}
+                        <p class="card-text text-muted">Brak opisu</p>
+                    {% endif %}
+
+                    <h5 class="mt-4">Podstawowe informacje</h5>
+                    <ul class="list-unstyled">
+                        {% if user.firstName or user.lastName %}
+                            <li>
+                                <strong>Imię i nazwisko:</strong> 
+                                {{ user.firstName }} {{ user.lastName }}
+                            </li>
+                        {% endif %}
+                        {% if user.birthDate %}
+                            <li>
+                                <strong>Wiek:</strong> 
+                                {{ user.birthDate|date('Y-m-d')|age }} lat
+                            </li>
+                        {% endif %}
+                        {% if user.gender %}
+                            <li><strong>Płeć:</strong> {{ user.gender }}</li>
+                        {% endif %}
+                        {% if user.seekingGender %}
+                            <li><strong>Szukam:</strong> {{ user.seekingGender }}</li>
+                        {% endif %}
+                    </ul>
+
+                    {% if user.interests|length > 0 %}
+                        <h5 class="mt-4">Zainteresowania</h5>
+                        <div class="mb-3">
+                            {% for interest in user.interests %}
+                                <span class="badge bg-primary me-1">{{ interest.name }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if user.photos|length > 0 %}
+                        <h5 class="mt-4">Galeria</h5>
+                        <div class="row g-3">
+                            {% for photo in user.photos %}
+                                <div class="col-md-4">
+                                    <img src="{{ asset('uploads/photos/' ~ photo.filename) }}" 
+                                         class="img-fluid rounded" 
+                                         alt="Zdjęcie {{ loop.index }}">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

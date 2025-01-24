@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Konwersacja z {{ otherUser.username }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('styles/messages.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <a href="{{ path('app_messages_index') }}" class="btn btn-sm btn-outline-secondary me-2">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        Konwersacja z {{ otherUser.username }}
+                    </h5>
+                </div>
+                <div class="card-body" id="messages-container" style="height: 400px; overflow-y: auto;">
+                    {% if messages is empty %}
+                        <div class="text-center text-muted">
+                            Rozpocznij konwersację wysyłając pierwszą wiadomość.
+                        </div>
+                    {% else %}
+                        {% for message in messages|reverse %}
+                            <div class="message mb-3 {% if message.sender == app.user %}text-end{% endif %}">
+                                <div class="message-content d-inline-block p-2 rounded {% if message.sender == app.user %}bg-primary text-white{% else %}bg-light{% endif %}" style="max-width: 75%;">
+                                    {{ message.content|nl2br }}
+                                    <div class="message-meta small {% if message.sender == app.user %}text-white-50{% else %}text-muted{% endif %}">
+                                        {{ message.createdAt|date('H:i') }}
+                                        {% if message.sender == app.user %}
+                                            {% if message.status == 'read' %}
+                                                <i class="fas fa-check-double" title="Przeczytane"></i>
+                                            {% elseif message.status == 'delivered' %}
+                                                <i class="fas fa-check" title="Dostarczone"></i>
+                                            {% else %}
+                                                <i class="fas fa-clock" title="Wysłane"></i>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="message-actions">
+                                    <button class="btn btn-sm btn-link text-danger delete-message" 
+                                            data-message-id="{{ message.id }}"
+                                            title="Usuń wiadomość">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <form id="message-form" class="d-flex" data-send-url="{{ path('app_messages_send', {id: otherUser.id}) }}">
+                        <textarea class="form-control me-2" id="message-content" rows="1" placeholder="Napisz wiadomość..."></textarea>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/messages.js') }}"></script>
+{% endblock %}

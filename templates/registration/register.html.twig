@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rejestracja - Miłość w sieci{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/forms.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-user-plus me-2"></i> Dołącz do nas
+                    </h1>
+                </div>
+                <div class="card-body p-4">
+                    {{ form_start(registrationForm) }}
+                        {{ form_row(registrationForm.email) }}
+                        {{ form_row(registrationForm.username) }}
+                        {{ form_row(registrationForm.firstName) }}
+                        {{ form_row(registrationForm.lastName) }}
+                        {{ form_row(registrationForm.birthDate) }}
+                        {{ form_row(registrationForm.gender) }}
+                        {{ form_row(registrationForm.seekingGender) }}
+                        {{ form_row(registrationForm.location) }}
+                        {{ form_row(registrationForm.plainPassword) }}
+                        {{ form_row(registrationForm.agreeTerms) }}
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus me-2"></i>Zarejestruj się
+                            </button>
+                        </div>
+                    {{ form_end(registrationForm) }}
+                    
+                    <div class="mt-3 text-center">
+                        <p>Masz już konto? <a href="{{ path('app_login') }}" class="text-primary">Zaloguj się</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

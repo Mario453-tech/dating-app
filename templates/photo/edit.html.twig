@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edytuj zdjęcie{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Edytuj zdjęcie</h1>
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <img src="{{ asset('uploads/photos/' ~ photo.filename) }}" class="img-fluid" alt="{{ photo.title }}">
+            </div>
+            <div class="col-md-6">
+                {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+                    <div class="mb-3">
+                        {{ form_label(form.title) }}
+                        {{ form_widget(form.title) }}
+                        {{ form_errors(form.title) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.description) }}
+                        {{ form_widget(form.description) }}
+                        {{ form_errors(form.description) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_label(form.photoFile) }}
+                        {{ form_widget(form.photoFile) }}
+                        {{ form_errors(form.photoFile) }}
+                        <small class="form-text text-muted">Pozostaw puste, jeśli nie chcesz zmieniać zdjęcia.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+                        <a href="{{ path('photo_index') }}" class="btn btn-secondary">Powrót do galerii</a>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

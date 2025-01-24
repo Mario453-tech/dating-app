@@ -1,0 +1,12 @@
+twig:
+    file_name_pattern: '*.twig'
+    paths:
+        '%kernel.project_dir%/vendor/easycorp/easyadmin-bundle/templates': EasyAdmin
+    form_themes:
+        - 'bootstrap_5_layout.html.twig'
+    globals:
+        app_request: '@request_stack'
+
+when@test:
+    twig:
+        strict_variables: true

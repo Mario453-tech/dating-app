@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wiadomości{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('styles/messages.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Wiadomości</h1>
+    
+    <div class="row">
+        <div class="col-md-12">
+            {% if conversations is empty %}
+                <div class="alert alert-info">
+                    Nie masz jeszcze żadnych konwersacji.
+                </div>
+            {% else %}
+                <div class="list-group">
+                    {% for conversation in conversations %}
+                        <a href="{{ path('app_messages_conversation', {id: conversation.user.id}) }}" 
+                           class="list-group-item list-group-item-action {% if conversation.unreadCount > 0 %}fw-bold{% endif %}">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">
+                                    {{ conversation.user.username }}
+                                    {% if conversation.unreadCount > 0 %}
+                                        <span class="badge bg-primary">{{ conversation.unreadCount }}</span>
+                                    {% endif %}
+                                </h5>
+                                <small>{{ conversation.lastMessage.createdAt|date('d.m.Y H:i') }}</small>
+                            </div>
+                            <p class="mb-1">{{ conversation.lastMessage.content|slice(0, 100) }}{% if conversation.lastMessage.content|length > 100 %}...{% endif %}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/messages.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dodaj nowe zdjęcie{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-image me-2"></i> Dodaj nowe zdjęcie
+                    </h1>
+                </div>
+                <div class="card-body">
+                    {% for message in app.flashes('error') %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+
+                    <form id="photoForm" 
+                          method="post"
+                          enctype="multipart/form-data" 
+                          class="needs-validation"
+                          data-action="{{ path('photo_new') }}"
+                          data-redirect="{{ path('app_profile') }}">
+                        {{ form_start(form) }}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.title, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'placeholder': 'Tytuł zdjęcia'
+                                        }
+                                    }) }}
+                                    {{ form_label(form.title, 'Tytuł zdjęcia') }}
+                                    {{ form_errors(form.title) }}
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.description, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'style': 'height: 100px',
+                                            'placeholder': 'Opis zdjęcia'
+                                        }
+                                    }) }}
+                                    {{ form_label(form.description, 'Opis zdjęcia') }}
+                                    {{ form_errors(form.description) }}
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Wybierz zdjęcie</label>
+                                    {{ form_widget(form.photoFile, {
+                                        'attr': {
+                                            'class': 'form-control',
+                                            'accept': 'image/*'
+                                        }
+                                    }) }}
+                                    <small class="text-muted">
+                                        Dozwolone formaty: JPEG, PNG. Maksymalny rozmiar: 5MB
+                                    </small>
+                                    {{ form_errors(form.photoFile) }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="preview-container">
+                                    <div id="previewPlaceholder" class="preview-placeholder">
+                                        <i class="fas fa-image"></i>
+                                        <p>Podgląd zdjęcia</p>
+                                    </div>
+                                    <img id="preview" class="photo-preview-image" src="#" alt="Podgląd">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <i class="fas fa-save me-2"></i> Zapisz zdjęcie
+                            </button>
+                            <a href="{{ path('app_profile') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i> Powrót do profilu
+                            </a>
+                        </div>
+                        {{ form_end(form) }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Modal z postępem przesyłania #}
+<div class="modal fade upload-progress-modal" id="uploadProgressModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="spinner-border text-primary upload-progress-spinner" role="status">
+                    <span class="visually-hidden">Przesyłanie...</span>
+                </div>
+                <h5>Przesyłanie zdjęcia...</h5>
+                <div class="progress upload-progress-bar">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                         role="progressbar" 
+                         style="width: 0%" 
+                         id="uploadProgress">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

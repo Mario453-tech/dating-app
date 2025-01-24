@@ -1,0 +1,86 @@
+{% extends '@EasyAdmin/crud/index.html.twig' %}
+
+{% block content_title %}
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>
+            <i class="fas fa-users"></i>
+            {{ ea.crud.customPageTitle ?? 'Lista użytkowników' }}
+        </h1>
+    </div>
+{% endblock %}
+
+{% block main %}
+    {% block search %}
+        {% if ea.crud.isSearchEnabled %}
+            {{ parent() }}
+        {% endif %}
+    {% endblock %}
+
+    <div class="table-responsive">
+        <table class="table datagrid">
+            <thead>
+                <tr>
+                    {% for field in ea.crud.currentFields %}
+                        <th class="{{ ea.field.property == ea.sort.fieldName ? 'sorted' }} {{ ea.sort.direction }}">
+                            {% if ea.field.isSortable %}
+                                <a href="{{ ea_url()
+                                    .setAction('index')
+                                    .setSort({
+                                        (field.property): field.property == ea.sort.fieldName
+                                            and ea.sort.direction == 'DESC'
+                                            ? 'ASC'
+                                            : 'DESC'
+                                    }) }}">
+                                    {{ field.label|raw }}
+                                    <i class="fa fa-fw fa-sort{{ field.property == ea.sort.fieldName ? '-' ~ ea.sort.direction|lower : '' }}"></i>
+                                </a>
+                            {% else %}
+                                <span>{{ field.label|raw }}</span>
+                            {% endif %}
+                        </th>
+                    {% endfor %}
+
+                    {% if ea.crud.actions|length > 0 %}
+                        <th class="actions">
+                            <span class="sr-only">{{ 'action.entity_actions'|trans(ea.i18n.translationParameters, 'EasyAdminBundle') }}</span>
+                        </th>
+                    {% endif %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for entity in entities %}
+                    <tr data-id="{{ entity.primaryKeyValue }}">
+                        {% for field in entity.fields %}
+                            <td class="{{ field.property == ea.sort.fieldName ? 'sorted' }}">
+                                {{ include(field.templatePath, { field: field, entity: entity }, with_context = false) }}
+                            </td>
+                        {% endfor %}
+
+                        {% if entity.actions|length > 0 %}
+                            <td class="actions">
+                                {% for action in entity.actions %}
+                                    {{ include(action.templatePath, { action: action, entity: entity }, with_context = false) }}
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="{{ ea.crud.currentFields|length + 1 }}" class="no-results">
+                            {{ 'datagrid.no_results'|trans(ea.i18n.translationParameters, 'EasyAdminBundle') }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% block paginator %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+{% endblock %}

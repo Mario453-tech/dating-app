@@ -1,0 +1,22 @@
+{% extends '@!EasyAdmin/crud/index.html.twig' %}
+
+{% block content_title %}
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>
+            <i class="fas fa-users"></i>
+            {{ ea.crud.customPageTitle ?? 'Lista ' ~ ea.crud.entityLabelInPlural|lower }}
+        </h1>
+    </div>
+{% endblock %}
+
+{% block main %}
+    {% block search %}
+        {% if ea.crud.isSearchEnabled %}
+            {{ parent() }}
+        {% endif %}
+    {% endblock %}
+
+    <div class="table-responsive">
+        {{ parent() }}
+    </div>
+{% endblock %}

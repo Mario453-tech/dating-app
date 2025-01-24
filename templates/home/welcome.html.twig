@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Witaj w Dating Site{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 mb-4">Witaj w Dating Site</h1>
+            <p class="lead mb-4">Znajdź swoją drugą połówkę już dziś!</p>
+            
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Nie masz jeszcze konta?</h5>
+                            <p class="card-text">Dołącz do nas i poznaj wspaniałych ludzi!</p>
+                            <a href="{{ path('app_register') }}" class="btn btn-primary btn-lg">Zarejestruj się</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Masz już konto?</h5>
+                            <p class="card-text">Zaloguj się i rozpocznij poszukiwania!</p>
+                            <a href="{{ path('app_login') }}" class="btn btn-success btn-lg">Zaloguj się</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <h2 class="h3 mb-4">Dlaczego warto do nas dołączyć?</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="feature-box">
+                            <i class="fas fa-users fa-3x mb-3"></i>
+                            <h3 class="h5">Wspaniała społeczność</h3>
+                            <p>Poznaj ludzi o podobnych zainteresowaniach</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-box">
+                            <i class="fas fa-shield-alt fa-3x mb-3"></i>
+                            <h3 class="h5">Bezpieczeństwo</h3>
+                            <p>Twoje dane są u nas bezpieczne</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-box">
+                            <i class="fas fa-heart fa-3x mb-3"></i>
+                            <h3 class="h5">Skuteczność</h3>
+                            <p>Tysiące udanych połączeń</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

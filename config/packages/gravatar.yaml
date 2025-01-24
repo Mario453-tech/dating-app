@@ -1,0 +1,8 @@
+parameters:
+    gravatar.api_key: '%env(GRAVATAR_API_KEY)%'
+
+services:
+    App\Service\GravatarService:
+        arguments:
+            $httpClient: '@http_client'
+            $apiKey: '%gravatar.api_key%'

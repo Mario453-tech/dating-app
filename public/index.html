@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miłość w sieci - Znajdź swoją drugą połówkę!</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="images/logo.png" alt="Miłość w sieci" height="40">
+                Miłość w sieci
+            </a>
+            <div class="ms-auto">
+                <button class="btn btn-outline-primary me-2">Zaloguj się</button>
+                <button class="btn btn-primary">Zarejestruj się</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section py-5 text-center">
+        <div class="container">
+            <h1 class="display-4 mb-4">Znajdź swoją drugą połówkę!</h1>
+            <p class="lead mb-5">Dołącz do tysięcy szczęśliwych par, które znalazły się na naszym portalu</p>
+            
+            <!-- Search Form -->
+            <div class="search-form bg-light p-4 rounded shadow-sm">
+                <form class="row g-3 justify-content-center">
+                    <div class="col-md-3">
+                        <select class="form-select" aria-label="Szukam">
+                            <option selected>Szukam...</option>
+                            <option value="1">Kobiety</option>
+                            <option value="2">Mężczyzny</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" class="form-control" placeholder="Wiek od">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" class="form-control" placeholder="Wiek do">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" placeholder="Lokalizacja">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Szukaj</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Profiles -->
+    <section class="featured-profiles py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Wyróżnione profile</h2>
+            <div class="row">
+                <!-- Profile cards will be dynamically loaded -->
+                <div class="col-md-3 mb-4">
+                    <div class="card">
+                        <img src="images/profile-placeholder.jpg" class="card-img-top" alt="Profile">
+                        <div class="card-body">
+                            <h5 class="card-title">Anna, 28</h5>
+                            <p class="card-text">Warszawa</p>
+                            <a href="#" class="btn btn-outline-primary btn-sm">Zobacz profil</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- More profile cards... -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-light py-4">
+        <div class="container text-center">
+            <p>&copy; 2025 Miłość w sieci. Wszystkie prawa zastrzeżone.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+</body>
+</html>

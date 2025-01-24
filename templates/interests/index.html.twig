@@ -1,0 +1,167 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Zainteresowania{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/interests.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        const ROUTES = {
+            add: '{{ path('app_interest_add') }}',
+            edit: function(id) {
+                return '{{ path('app_interest_edit', {'id': 'ID'}) }}'.replace('ID', id);
+            }
+        };
+    </script>
+    <script src="{{ asset('js/interests.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white py-3">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-heart me-2"></i> Twoje zainteresowania
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-4">
+                        Wybierz zainteresowania, które najlepiej Cię opisują. 
+                        Pomoże to w znalezieniu osób o podobnych pasjach.
+                    </p>
+
+                    {# Modal do dodawania/edycji zainteresowania #}
+                    <div class="modal fade" id="interestModal" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Dodaj nowe zainteresowanie</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form id="interestForm" action="{{ path('app_interest_add') }}" method="POST">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="interestName" class="form-label">Nazwa zainteresowania</label>
+                                            <input type="text" class="form-control" id="interestName" name="name" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="categorySelect" class="form-label">Kategoria</label>
+                                            <select class="form-select" id="categorySelect" name="category" required>
+                                                {% for category in categories %}
+                                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+                                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="interests-container">
+                        <div class="row">
+                            {% set columns = 2 %}
+                            {% set categoriesPerColumn = (categories|length / columns)|round(0, 'ceil') %}
+                            
+                            {% for columnIndex in 0..columns-1 %}
+                                <div class="col-md-6">
+                                    {% for categoryIndex in (columnIndex * categoriesPerColumn)..((columnIndex + 1) * categoriesPerColumn - 1) %}
+                                        {% if categoryIndex < categories|length %}
+                                            {% set category = categories[categoryIndex] %}
+                                            {% if category.id in interestsByCategory|keys %}
+                                                <div class="interest-category mb-4" id="category-{{ category.id }}">
+                                                    <div class="category-header">
+                                                        <h3>
+                                                            <i class="fas {{ category.icon|default('fa-tags') }}"></i>
+                                                            {{ category.name }}
+                                                        </h3>
+                                                        <button type="button" 
+                                                                class="btn btn-sm btn-outline-primary add-interest-btn"
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#interestModal"
+                                                                data-category-id="{{ category.id }}"
+                                                                data-category-name="{{ category.name }}">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="interests-list" data-max-items="4">
+                                                        {% for interest in interestsByCategory[category.id] %}
+                                                            <div class="interest-checkbox {% if loop.index > 4 %}d-none{% endif %}" 
+                                                                 data-index="{{ loop.index }}">
+                                                                <div class="interest-content">
+                                                                    <input type="checkbox" 
+                                                                           id="interest_{{ interest.id }}"
+                                                                           name="interests[]"
+                                                                           value="{{ interest.id }}"
+                                                                           {% if interest.id in userInterestIds %}checked="checked"{% endif %}
+                                                                           class="interest-input"
+                                                                           data-action="{{ path('app_interest_toggle', {'id': interest.id}) }}">
+                                                                    <label for="interest_{{ interest.id }}" class="interest-label">
+                                                                        {{ interest.name }}
+                                                                    </label>
+                                                                </div>
+                                                                <div class="interest-actions">
+                                                                    <button type="button" 
+                                                                            class="btn btn-sm btn-link edit-interest"
+                                                                            data-interest-id="{{ interest.id }}"
+                                                                            data-interest-name="{{ interest.name }}"
+                                                                            data-category-id="{{ category.id }}"
+                                                                            data-bs-toggle="modal" 
+                                                                            data-bs-target="#interestModal">
+                                                                        <i class="fas fa-edit"></i>
+                                                                    </button>
+                                                                    <button type="button" 
+                                                                            class="btn btn-sm btn-link text-danger delete-interest"
+                                                                            data-interest-id="{{ interest.id }}"
+                                                                            data-action="{{ path('app_interest_delete', {'id': interest.id}) }}">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    {% if interestsByCategory[category.id]|length > 4 %}
+                                                        <div class="text-center mt-2">
+                                                            <button type="button" 
+                                                                    class="btn btn-link btn-sm show-more-interests"
+                                                                    data-category-id="{{ category.id }}"
+                                                                    data-showing-all="false">
+                                                                <i class="fas fa-chevron-down me-1"></i>
+                                                                Pokaż więcej ({{ interestsByCategory[category.id]|length - 4 }})
+                                                            </button>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="save-button mt-4">
+                        <div class="container">
+                            <div class="d-flex gap-2">
+                                <a href="{{ path('app_profile') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i> Powrót
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

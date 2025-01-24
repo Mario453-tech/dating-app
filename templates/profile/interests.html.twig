@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Twoje zainteresowania{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/interests.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="h3 mb-0">
+                            <i class="fas fa-heart me-2"></i> Twoje zainteresowania
+                        </h1>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'id': 'interests-form'}}) }}
+                            <div class="interests-container">
+                                {{ form_widget(form.interests) }}
+                            </div>
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i> Zapisz zmiany
+                                </button>
+                                <a href="{{ path('app_profile') }}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i> Powrót do profilu
+                                </a>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/interests.js') }}"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('interests-form');
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            
+            fetch('{{ path('app_interests_update') }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '{{ path('app_profile') }}';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Błąd:', error);
+                alert('Wystąpił błąd podczas zapisywania zmian.');
+            });
+        });
+    });
+    </script>
+{% endblock %}

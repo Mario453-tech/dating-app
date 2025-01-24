@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dopasowania{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Twoje dopasowania</h1>
+    
+    <div class="row">
+        <div class="col-md-12">
+            {% if matches is empty %}
+                <div class="alert alert-info">
+                    Nie masz jeszcze żadnych dopasowań. Wypełnij swój profil, aby znaleźć osoby o podobnych zainteresowaniach!
+                </div>
+            {% else %}
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for match in matches %}
+                        <div class="col">
+                            <div class="card h-100">
+                                {% if match.profilePhoto %}
+                                    <img src="{{ asset('uploads/profile_photos/' ~ match.profilePhoto) }}" 
+                                         class="card-img-top" alt="{{ match.username }}">
+                                {% else %}
+                                    <img src="{{ asset('images/default-profile.png') }}" 
+                                         class="card-img-top" alt="{{ match.username }}">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ match.username }}</h5>
+                                    <p class="card-text">
+                                        {% if match.bio %}
+                                            {{ match.bio|length > 100 ? match.bio|slice(0, 100) ~ '...' : match.bio }}
+                                        {% else %}
+                                            <em>Brak opisu</em>
+                                        {% endif %}
+                                    </p>
+                                    <div class="d-grid gap-2">
+                                        <a href="{{ path('app_profile_view', {'id': match.id}) }}" 
+                                           class="btn btn-primary">Zobacz profil</a>
+                                        <a href="{{ path('app_messages_conversation', {'id': match.id}) }}" 
+                                           class="btn btn-outline-primary">Wyślij wiadomość</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

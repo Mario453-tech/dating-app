@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Zablokowani użytkownicy{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Zablokowani użytkownicy</h1>
+
+    {% if blockedUsers|length > 0 %}
+        <div class="list-group">
+            {% for block in blockedUsers %}
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-1">{{ block.blocked.username }}</h5>
+                        {% if block.reason %}
+                            <small class="text-muted">Powód: {{ block.reason }}</small>
+                        {% endif %}
+                        <br>
+                        <small class="text-muted">Zablokowano: {{ block.createdAt|date('Y-m-d H:i:s') }}</small>
+                    </div>
+                    <button class="btn btn-outline-danger unblock-user" 
+                            data-user-id="{{ block.blocked.id }}"
+                            onclick="unblockUser(this)">
+                        Odblokuj
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">Nie masz zablokowanych użytkowników.</p>
+    {% endif %}
+</div>
+
+<script>
+function unblockUser(button) {
+    const userId = button.dataset.userId;
+    
+    if (confirm('Czy na pewno chcesz odblokować tego użytkownika?')) {
+        fetch(`/users/${userId}/unblock`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                button.closest('.list-group-item').remove();
+                if (document.querySelectorAll('.list-group-item').length === 0) {
+                    location.reload();
+                }
+            } else {
+                alert(data.error || 'Wystąpił błąd podczas odblokowywania użytkownika');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Wystąpił błąd podczas odblokowywania użytkownika');
+        });
+    }
+}
+</script>
+{% endblock %}

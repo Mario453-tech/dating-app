@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Miłość w sieci - Znajdź swoją drugą połówkę!{% endblock %}
+
+{% block body %}
+    <!-- Hero Section -->
+    <div class="hero-section py-5 text-center">
+        <div class="container">
+            <h1 class="display-4 mb-4">Znajdź swoją drugą połówkę! <i class="fas fa-heart text-danger"></i></h1>
+            <p class="lead mb-5">Dołącz do tysięcy szczęśliwych par, które znalazły się na naszym portalu</p>
+            
+            <!-- Search Form -->
+            <div class="card p-4 mb-5">
+                {{ form_start(search_form) }}
+                <div class="row g-3">
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label class="form-label"><i class="fas fa-search"></i> Szukam</label>
+                        {{ form_widget(search_form.seeking, {'attr': {'class': 'form-select'}}) }}
+                    </div>
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <label class="form-label"><i class="fas fa-birthday-cake"></i> Wiek od</label>
+                        {{ form_widget(search_form.age_from, {'attr': {'class': 'form-control', 'placeholder': 'Od'}}) }}
+                    </div>
+                    <div class="col-6 col-md-3 col-lg-2">
+                        <label class="form-label"><i class="fas fa-birthday-cake"></i> Wiek do</label>
+                        {{ form_widget(search_form.age_to, {'attr': {'class': 'form-control', 'placeholder': 'Do'}}) }}
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-3">
+                        <label class="form-label"><i class="fas fa-map-marker-alt"></i> Lokalizacja</label>
+                        {{ form_widget(search_form.location, {'attr': {'class': 'form-control', 'placeholder': 'Np. Warszawa'}}) }}
+                    </div>
+                    <div class="col-12 col-lg-2">
+                        <label class="form-label d-none d-lg-block">&nbsp;</label>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Szukaj
+                            </button>
+                            <a href="{{ path('app_register') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-user-plus"></i> Zarejestruj
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(search_form) }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Profiles Section -->
+    <div class="container">
+        <h2 class="text-center mb-4">Wyróżnione Profile <i class="fas fa-star text-warning"></i></h2>
+        <div class="row g-4">
+            {% for profile in featured_profiles %}
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <img src="{{ asset('uploads/photos/' ~ profile.photo) }}" class="card-img-top" alt="{{ profile.name }}" style="height: 250px; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ profile.name }}, {{ profile.age }} lat</h5>
+                            <p class="card-text">
+                                <i class="fas fa-map-marker-alt text-primary"></i> {{ profile.location }}
+                            </p>
+                            <a href="#" class="btn btn-primary">
+                                <i class="fas fa-user"></i> Zobacz profil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container my-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-user-shield fa-3x text-primary mb-3"></i>
+                        <h3>Bezpieczeństwo</h3>
+                        <p>Twoje dane są u nas bezpieczne. Dbamy o prywatność naszych użytkowników.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-heart fa-3x text-danger mb-3"></i>
+                        <h3>Skuteczność</h3>
+                        <p>Tysiące szczęśliwych par znalazło się dzięki naszemu portalowi.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <i class="fas fa-comments fa-3x text-success mb-3"></i>
+                        <h3>Komunikacja</h3>
+                        <p>Wygodny czat i system wiadomości ułatwiają poznanie się.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="container-fluid py-5 bg-primary text-white text-center">
+        <div class="container">
+            <h2 class="mb-4">Dołącz do nas już dziś!</h2>
+            <p class="lead mb-4">Zarejestruj się za darmo i znajdź swoją drugą połówkę</p>
+            <a href="{{ path('app_register') }}" class="btn btn-light btn-lg">
+                <i class="fas fa-user-plus"></i> Zarejestruj się
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{{ asset('images/hero-bg.jpg') }}') center/cover;
+            color: white;
+            padding: 100px 0;
+            margin-top: -1.5rem;
+        }
+        
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .hero-section .lead {
+            font-size: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+            padding: 0.75rem 1rem;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .btn {
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+        }
+        
+        .bg-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        }
+    </style>
+{% endblock %}

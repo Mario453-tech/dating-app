@@ -1,0 +1,15 @@
+{% extends '@!EasyAdmin/crud/field/array.html.twig' %}
+
+{% block field %}
+    {% if ea.crud.currentAction == 'detail' %}
+        {{ parent() }}
+    {% else %}
+        {% if field.value is not empty %}
+            <span class="badge badge-secondary">
+                {{ field.formattedValue|join(', ') }}
+            </span>
+        {% else %}
+            <span class="badge badge-light">-</span>
+        {% endif %}
+    {% endif %}
+{% endblock %}

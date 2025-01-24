@@ -1,0 +1,10 @@
+{% if app.session.get('flash_messages') is defined %}
+    {% for type, messages in app.session.get('flash_messages') %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% do app.session.remove('flash_messages') %}
+{% endif %}

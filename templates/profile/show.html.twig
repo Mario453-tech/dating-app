@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ user.username }} - Profil{% endblock %}
+
+{% block body %}
+<main class="container mt-5">
+    <div class="row">
+        <!-- Sekcja z głównym zdjęciem profilowym -->
+        <aside class="col-md-4">
+            <article class="card">
+                {% if user.profilePhoto %}
+                    <img src="{{ asset('uploads/profile_photos/' ~ user.profilePhoto) }}" 
+                         class="card-img-top" 
+                         alt="{{ user.username }}"
+                         style="max-height: 300px; object-fit: cover;">
+                {% else %}
+                    <img src="{{ gravatarImage }}" 
+                         class="card-img-top" 
+                         alt="Zdjęcie profilowe"
+                         style="max-height: 300px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body">
+                    <h1 class="h5 card-title">{{ user.username }}</h1>
+                    <address class="card-text">
+                        <p><i class="fas fa-map-marker-alt"></i> {{ user.location|default('Brak lokalizacji') }}</p>
+                        {% if user.birthDate %}
+                            <p><i class="fas fa-birthday-cake"></i> {{ user.birthDate|date('d.m.Y') }} 
+                               <small>({{ "now"|date('Y') - user.birthDate|date('Y') }} lat)</small>
+                            </p>
+                        {% else %}
+                            <p><i class="fas fa-birthday-cake"></i> Brak daty urodzenia</p>
+                        {% endif %}
+                    </address>
+                </div>
+            </article>
+        </aside>
+        
+        <!-- Sekcja z informacjami o profilu -->
+        <section class="col-md-8">
+            <article class="card">
+                <div class="card-body">
+                    <section>
+                        <h2 class="h4">O mnie</h2>
+                        <p>{{ user.bio|default('Brak opisu') }}</p>
+                    </section>
+
+                    <section class="mt-4">
+                        <h2 class="h4">Podstawowe informacje</h2>
+                        <dl class="row">
+                            <dt class="col-sm-3">Imię</dt>
+                            <dd class="col-sm-9">{{ user.firstName|default('Nie podano') }}</dd>
+
+                            <dt class="col-sm-3">Nazwisko</dt>
+                            <dd class="col-sm-9">{{ user.lastName|default('Nie podano') }}</dd>
+
+                            <dt class="col-sm-3">Płeć</dt>
+                            <dd class="col-sm-9">
+                                {% if user.gender == 'M' %}
+                                    Mężczyzna
+                                {% elseif user.gender == 'F' %}
+                                    Kobieta
+                                {% else %}
+                                    Inne
+                                {% endif %}
+                            </dd>
+
+                            <dt class="col-sm-3">Szuka</dt>
+                            <dd class="col-sm-9">
+                                {% if user.seekingGender == 'M' %}
+                                    Mężczyzny
+                                {% elseif user.seekingGender == 'F' %}
+                                    Kobiety
+                                {% else %}
+                                    Wszystkich
+                                {% endif %}
+                            </dd>
+
+                            <dt class="col-sm-3">Dołączył(a)</dt>
+                            <dd class="col-sm-9">{{ user.createdAt|date('d.m.Y') }}</dd>
+                        </dl>
+                    </section>
+
+                    <section class="mt-4">
+                        <h2 class="h4">
+                            Zainteresowania
+                            {% if app.user and app.user.id == user.id %}
+                                <a href="{{ path('app_interests_index') }}" class="btn btn-sm btn-outline-primary float-end">
+                                    <i class="fas fa-edit"></i> Edytuj
+                                </a>
+                            {% endif %}
+                        </h2>
+                        {% if user.interests|length > 0 %}
+                            <div class="interests-display">
+                                {% set currentCategory = '' %}
+                                {% for interest in user.interests|sort((a, b) => a.category.name <=> b.category.name) %}
+                                    {% if currentCategory != interest.category.name %}
+                                        {% if currentCategory != '' %}
+                                            </div>
+                                        {% endif %}
+                                        <div class="interest-category mb-3">
+                                            <h3 class="h6 text-muted">
+                                                {% if interest.category.icon %}
+                                                    <i class="fas {{ interest.category.icon }}"></i>
+                                                {% endif %}
+                                                {{ interest.category.name }}
+                                            </h3>
+                                            <div class="interest-tags">
+                                    {% set currentCategory = interest.category.name %}
+                                    {% endif %}
+                                    <span class="badge bg-primary">{{ interest.name }}</span>
+                                {% endfor %}
+                                {% if currentCategory != '' %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <p class="text-muted">Brak wybranych zainteresowań</p>
+                        {% endif %}
+                    </section>
+                </div>
+            </article>
+        </section>
+    </div>
+</main>
+
+<style>
+.interests-display {
+    margin-top: 1rem;
+}
+
+.interest-category {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.interest-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.interest-tags .badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+</style>
+{% endblock %}

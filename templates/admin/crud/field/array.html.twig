@@ -1,0 +1,15 @@
+{% extends '@EasyAdmin/crud/field/array.html.twig' %}
+
+{% block field %}
+    {% if ea.crud.currentAction == 'detail' %}
+        {{ parent() }}
+    {% else %}
+        {% set array_field = field %}
+        {% set value = array_field.value %}
+        {% if value is not empty %}
+            <span class="badge badge-secondary">{{ value|join(', ') }}</span>
+        {% else %}
+            <span class="badge badge-secondary">-</span>
+        {% endif %}
+    {% endif %}
+{% endblock %}

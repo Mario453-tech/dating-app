@@ -1,0 +1,16 @@
+easy_admin:
+    design:
+        assets:
+            css:
+                - 'bundles/easyadmin/app.css'
+            js:
+                - 'bundles/easyadmin/app.js'
+        menu:
+            - { entity: 'User', label: 'Użytkownicy', icon: 'users' }
+    
+    site_name: 'Panel Administracyjny'
+    formats:
+        datetime: 'd/m/Y H:i:s'
+        date: 'd/m/Y'
+        time: 'H:i:s'
+        number: '%.2f'

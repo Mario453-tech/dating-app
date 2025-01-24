@@ -1,0 +1,342 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mój profil{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('css/gallery.css') }}" rel="stylesheet">
+    <style>
+        .profile-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .interests-section {
+            margin-top: 2rem;
+        }
+
+        .interest-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .interest-category-title {
+            font-size: 1.1rem;
+            color: var(--bs-gray-700);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--bs-primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .interests-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .interest-tag {
+            background-color: var(--bs-primary);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .interest-tag i {
+            font-size: 0.8rem;
+        }
+
+        .profile-card {
+            border: none;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            display: block;
+            border: 3px solid var(--bs-primary);
+        }
+
+        .profile-name {
+            text-align: center;
+            margin-bottom: 0.3rem;
+            color: var(--bs-dark);
+        }
+
+        .profile-username {
+            text-align: center;
+            color: var(--bs-gray-600);
+            margin-bottom: 1rem;
+        }
+
+        .profile-info-item {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--bs-gray-200);
+        }
+
+        .profile-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .profile-info-icon {
+            color: var(--bs-primary);
+            width: 25px;
+            text-align: center;
+            margin-right: 0.5rem;
+        }
+
+        .profile-bio {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: var(--bs-gray-700);
+            white-space: pre-line;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .card-header-title {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--bs-gray-700);
+        }
+
+        .about-me-section {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .about-me-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: var(--bs-gray-700);
+        }
+
+        .about-me-header i {
+            margin-right: 0.5rem;
+            color: var(--bs-primary);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="main-container py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                {# Karta profilu #}
+                <div class="profile-card card">
+                    <div class="card-body">
+                        {% if app.user.profilePhoto %}
+                            <img src="{{ asset('uploads/profile_photos/' ~ app.user.profilePhoto) }}" 
+                                 alt="Zdjęcie profilowe" 
+                                 class="profile-photo rounded-circle">
+                        {% else %}
+                            <img src="{{ gravatar(app.user.email, 150) }}" 
+                                 alt="Zdjęcie profilowe" 
+                                 class="profile-photo rounded-circle">
+                        {% endif %}
+                        
+                        <h4 class="profile-name">{{ app.user.firstName }} {{ app.user.lastName }}</h4>
+                        <p class="profile-username">@{{ app.user.username }}</p>
+                        
+                        <div class="form-actions">
+                            <a href="{{ path('app_profile_edit') }}" class="btn btn-primary">
+                                <i class="fas fa-edit me-2"></i> Edytuj profil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {# Informacje podstawowe #}
+                <div class="profile-card card">
+                    <div class="card-body">
+                        <h5 class="card-header-title mb-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Informacje podstawowe
+                        </h5>
+                        
+                        <div class="profile-info-item">
+                            <i class="fas fa-calendar-alt profile-info-icon"></i>
+                            <strong>Data urodzenia:</strong><br>
+                            {{ app.user.birthDate ? app.user.birthDate|date('d.m.Y') : 'Nie podano' }}
+                        </div>
+                        
+                        <div class="profile-info-item">
+                            <i class="fas fa-venus-mars profile-info-icon"></i>
+                            <strong>Płeć:</strong><br>
+                            {% if app.user.gender == 'M' %}
+                                Mężczyzna
+                            {% elseif app.user.gender == 'F' %}
+                                Kobieta
+                            {% else %}
+                                Nie podano
+                            {% endif %}
+                        </div>
+                        
+                        <div class="profile-info-item">
+                            <i class="fas fa-heart profile-info-icon"></i>
+                            <strong>Szukam:</strong><br>
+                            {% if app.user.seekingGender == 'M' %}
+                                Mężczyzny
+                            {% elseif app.user.seekingGender == 'F' %}
+                                Kobiety
+                            {% else %}
+                                Nie podano
+                            {% endif %}
+                        </div>
+                        
+                        <div class="profile-info-item">
+                            <i class="fas fa-map-marker-alt profile-info-icon"></i>
+                            <strong>Lokalizacja:</strong><br>
+                            {{ app.user.location ?: 'Nie podano' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                {# Galeria zdjęć #}
+                <div class="profile-card card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-header-title">
+                                <i class="fas fa-images me-2"></i>
+                                Moje zdjęcia
+                            </h5>
+                            <a href="{{ path('photo_new') }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus me-1"></i> Dodaj zdjęcie
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {% if photos|length > 0 %}
+                            <div class="photo-gallery">
+                                <div class="swiper mySwiper">
+                                    <div class="swiper-wrapper">
+                                        {% for photo in photos %}
+                                            <div class="swiper-slide">
+                                                <a href="{{ asset('uploads/photos/' ~ photo.filename) }}" 
+                                                   data-lightbox="gallery" 
+                                                   data-title="{{ photo.description|default('Brak opisu') }}">
+                                                    <img src="{{ asset('uploads/photos/' ~ photo.filename) }}" 
+                                                         alt="{{ photo.description|default('Zdjęcie') }}"
+                                                         class="img-fluid">
+                                                </a>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="swiper-pagination"></div>
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="photo-empty-state">
+                                <i class="fas fa-camera fa-3x"></i>
+                                <p>Nie masz jeszcze żadnych zdjęć.</p>
+                                <a href="{{ path('photo_new') }}" class="btn btn-primary">
+                                    <i class="fas fa-plus me-1"></i> Dodaj pierwsze zdjęcie
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# O mnie #}
+                <div class="about-me-section">
+                    <div class="about-me-header">
+                        <i class="fas fa-user fa-lg"></i>
+                        <h5 class="mb-0">O mnie</h5>
+                    </div>
+                    <div class="profile-bio">
+                        {{ app.user.bio|nl2br ?: 'Nie dodano jeszcze opisu.' }}
+                    </div>
+                </div>
+
+                {# Zainteresowania #}
+                <div class="interests-section">
+                    <div class="card profile-card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-header-title">
+                                    <i class="fas fa-heart me-2"></i>
+                                    Zainteresowania
+                                </h5>
+                                <a href="{{ path('app_interests') }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-plus me-1"></i> Zarządzaj
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {% if app.user.interests is not empty %}
+                                {% set categorizedInterests = {} %}
+                                {% for interest in app.user.interests %}
+                                    {% if interest.category %}
+                                        {% set category = interest.category.name %}
+                                        {% if categorizedInterests[category] is not defined %}
+                                            {% set categorizedInterests = categorizedInterests|merge({(category): []}) %}
+                                        {% endif %}
+                                        {% set categorizedInterests = categorizedInterests|merge({
+                                            (category): categorizedInterests[category]|merge([interest])
+                                        }) %}
+                                    {% else %}
+                                        {% set category = 'Inne' %}
+                                        {% if categorizedInterests[category] is not defined %}
+                                            {% set categorizedInterests = categorizedInterests|merge({(category): []}) %}
+                                        {% endif %}
+                                        {% set categorizedInterests = categorizedInterests|merge({
+                                            (category): categorizedInterests[category]|merge([interest])
+                                        }) %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% for category, interests in categorizedInterests %}
+                                    <div class="interest-category">
+                                        <h6 class="interest-category-title">
+                                            {% if category != 'Inne' %}
+                                                {{ category }}
+                                            {% else %}
+                                                <i class="fas fa-tags me-2"></i>Inne zainteresowania
+                                            {% endif %}
+                                        </h6>
+                                        <div class="interests-tags">
+                                            {% for interest in interests %}
+                                                <span class="interest-tag">
+                                                    <i class="fas fa-tag"></i>
+                                                    {{ interest.name }}
+                                                </span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted">Nie dodano jeszcze zainteresowań</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/gallery.js') }}"></script>
+{% endblock %}

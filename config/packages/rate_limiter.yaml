@@ -1,0 +1,8 @@
+framework:
+    rate_limiter:
+        limiters:
+            message:
+                policy: 'fixed_window'
+                limit: 100
+                interval: '1 hour'
+                cache_pool: 'cache.rate_limiter'

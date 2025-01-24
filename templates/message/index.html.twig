@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Wiadomości{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Twoje wiadomości</h1>
+    
+    <div class="row">
+        <div class="col-md-12">
+            {% if conversations is empty %}
+                <div class="alert alert-info">
+                    Nie masz jeszcze żadnych wiadomości.
+                </div>
+            {% else %}
+                <div class="list-group">
+                    {% for conversation in conversations %}
+                        <a href="{{ path('app_messages_conversation', {'id': conversation.otherUser.id}) }}"
+                           class="list-group-item list-group-item-action {% if conversation.hasUnread %}fw-bold{% endif %}">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ conversation.otherUser.username }}</h5>
+                                <small>{{ conversation.lastMessage.createdAt|date('d.m.Y H:i') }}</small>
+                            </div>
+                            <p class="mb-1">{{ conversation.lastMessage.content|length > 50 ? 
+                                conversation.lastMessage.content|slice(0, 50) ~ '...' : 
+                                conversation.lastMessage.content }}</p>
+                            {% if conversation.hasUnread %}
+                                <span class="badge bg-primary">Nowa</span>
+                            {% endif %}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
